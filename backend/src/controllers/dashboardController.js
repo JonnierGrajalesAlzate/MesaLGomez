@@ -5,7 +5,7 @@ export const getDashboard = async (req, res) => {
 
         const { usuario_id } = req.params;
 
-        const activos = await pool.query(`
+        const pendientes = await pool.query(`
             SELECT COUNT(*) total
             FROM tickets
             WHERE usuario_id = $1
@@ -27,7 +27,7 @@ export const getDashboard = async (req, res) => {
 
         res.json({
             success: true,
-            activos: Number(activos.rows[0].total),
+            pendientes: Number(pendientes.rows[0].total),
             resueltos: Number(resueltos.rows[0].total),
             total: Number(total.rows[0].total)
         });
