@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { getDashboard, getUltimosTickets } from "../services/dashboardService";
+import { getNoticias } from "../services/noticiasService";
 import Footer from "../components/Footer"
 import inicio from "../assets/inicio.png";
 import crear from "../assets/crearTickets.png";
@@ -13,41 +14,49 @@ import logo from "../assets/favicon.png"
 function Dashboard() {
     const navigate = useNavigate();
 
-    const usuario = JSON.parse(localStorage.getItem("usuario")) || {};
+    const usuario = JSON.parse(
+        localStorage.getItem("usuario")
+    ) || {};
 
     const [estadisticas, setEstadisticas] = useState({
-        activos: 0,
+        pendientes: 0,
         resueltos: 0,
         total: 0,
     });
-    
 
     const [loading, setLoading] = useState(true);
     const [ultimosTickets, setUltimosTickets] = useState([]);
-
-    useEffect(() => {
-        cargarDashboard();
-    }, []);
+    const [noticias, setNoticias] = useState([]);
 
     const cargarDashboard = async () => {
         try {
             const data = await getDashboard(usuario.id);
 
             setEstadisticas({
-                activos: data.activos,
+                pendientes: data.pendientes,
                 resueltos: data.resueltos,
                 total: data.total,
             });
- 
 
             const ticketsData = await getUltimosTickets(usuario.id);
             setUltimosTickets(ticketsData);
+
+            const noticiasData = await getNoticias();
+
+            console.log("Noticias:", noticiasData);
+
+            setNoticias(noticiasData);
+
         } catch (error) {
             console.error(error);
         } finally {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        cargarDashboard();
+    }, []);
 
     if (loading) {
         return (
@@ -74,60 +83,132 @@ function Dashboard() {
         border border-slate-200
     "
 >
-    <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
+   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="bg-white border border-slate-200 rounded-3xl p-8">
 
-        {/* Información */}
+        <div className="flex flex-col md:flex-row items-center justify-center gap-10 h-full">
 
-        <div> 
-            <h2 className="text-3xl font-bold text-[#0B2347] mb-3">
-                Hola {usuario.nombre}, 
-            </h2>
-            <h2 className="text-3xl font-bold text-[#0B2347] mb-3">
-                te damos la bienvenida a Soporte LG
-            </h2>
+            {/* Sección de las estadisticas del usuario */}
+            <div className="rounded-2xl p-6 min-w-[180px]">
 
-            <p className="text-slate-500 mb-8">
-                Aqui tienes un resumen de tu actividad de tickets
-            </p>
+                <div className="flex flex-col gap-6">
+                
+                    <div className="text-center">
+                        <p className="text-sm text-orange-500">
+                            Pendientes
+                        </p>
 
-            <div className="flex gap-10">
+                        <p className="text-3xl font-bold text-orange-500">
+                            {estadisticas.pendientes}
+                        </p>
+                    </div>
 
-                <div>
-                    <p className="text-slate-500 text-sm">
-                        Activos
-                    </p>
+                    <div className="text-center">
+                        <p className="text-sm text-green-600">
+                            Resueltos
+                        </p>
 
-                    <p className="text-4xl font-bold text-[#1E222B]">
-                        {estadisticas.activos}
-                    </p>
+                        <p className="text-3xl font-bold text-green-600">
+                            {estadisticas.resueltos}
+                        </p>
+                    </div>
+
+                    <div className="text-center">
+                        <p className="text-sm text-slate-600">
+                            Total
+                        </p>
+
+                        <p className="text-3xl font-bold text-[#1E222B]">
+                            {estadisticas.total}
+                        </p>
+                    </div>
+
                 </div>
+            </div> 
+            {/* Sección de bienvenida*/}
+            <div className="flex-1 text-center">
 
-                <div>
-                    <p className="text-slate-500 text-sm">
-                        Resueltos
-                    </p>
+                <h2 className="text-3xl font-bold text-[#0B2347] mb-3">
+                    Hola {usuario.nombre},
+                </h2>
 
-                    <p className="text-4xl font-bold text-[#1E222B]">
-                        {estadisticas.resueltos}
-                    </p>
-                </div>
+                <h2 className="text-3xl font-bold text-[#0B2347] mb-4">
+                    Te damos la bienvenida a Soporte LG
+                </h2>
 
-                <div>
-                    <p className="text-slate-500 text-sm">
-                        Total
-                    </p>
-
-                    <p className="text-4xl font-bold text-[#1E222B]">
-                        {estadisticas.total}
-                    </p>
-                </div>
+                <p className="text-slate-500">
+                    Aquí tienes un resumen de tu actividad de tickets.
+                </p>
 
             </div>
 
         </div>
+
     </div>
+
+    {/* Sección de noticias*/}
+    <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+
+        <h3 className="font-bold text-xl text-[#0076e3] mb-5">
+            Noticias
+        </h3>
+
+        <div className="space-y-4 max-h-[300px] overflow-y-auto">
+
+            {noticias.length > 0 ? (
+                noticias.map((noticia) => (
+                    <div
+                        key={noticia.id}
+                        className="
+                            border-l-4
+                            border-[#00d4a1]
+                            rounded-lg
+                            p-4
+                            bg-slate-50
+                        "
+                    >
+                        <div className="flex justify-between items-center">
+
+                            <h4 className="font-semibold text-[#1e222b]">
+                                {noticia.titulo}
+                            </h4>
+
+                            <span
+                                className={
+                                    noticia.etiqueta === "Importante"
+                                        ? "bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full"
+                                        : "bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full"
+                                }
+                            >
+                                {noticia.etiqueta}
+                            </span>
+
+                        </div>
+
+                        <p className="text-sm text-slate-500 mt-2">
+                            {noticia.descripcion}
+                        </p>
+
+                        <div className="mt-2 text-xs text-slate-400">
+                            Publicado por Soporte LG
+                        </div>
+
+                    </div>
+                ))
+            ) : (
+                <p className="text-slate-400">
+                    No hay noticias disponibles.
+                </p>
+            )}
+
+        </div>
+
+    </div>
+
 </div>
-            {/* ACCESOS RAPIDOS */}
+
+</div>
+            {/*Accesos rapidos para creatTickets/ verTickets y centro de ayuda*/}
 
             <div>
 
@@ -139,7 +220,7 @@ function Dashboard() {
 
                     <div
                         onClick={() => navigate("/crear-ticket")}
-                        className="bg-white border border-slate-200 rounded-3xl p-8 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:bg-[#ffffff39]  transition-all"
+                        className="bg-white border border-slate-200 rounded-3xl p-8 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:bg-[#c3cfdb]  transition-all"
                     >
 
                         <div className="bg-[#c3cfdb] w-fit p-4 rounded-2xl mb-5">
@@ -210,7 +291,7 @@ function Dashboard() {
 
             </div>
 
-            {/* TABLA */}
+            {/*Tabla con las solicitudes recientes */}
 
             <div className="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden">
 
@@ -298,11 +379,14 @@ function Dashboard() {
                                         </td>
 
                                         <td className="p-4 text-slate-500">
-                                            {new Date(
-                                                ticket.fecha_creacion
-                                            ).toLocaleDateString()}
+                                           {new Date(ticket.fecha_creacion).toLocaleString("es-CO", {
+                                              day: "2-digit",
+                                              month: "2-digit",
+                                              year: "numeric",
+                                              hour: "2-digit",
+                                              minute: "2-digit",
+                                               })}
                                         </td>
-
                                     </tr>
 
                                 ))
