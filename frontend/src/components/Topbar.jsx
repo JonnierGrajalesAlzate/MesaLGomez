@@ -63,7 +63,7 @@ function Topbar() {
 
                     <div>
                         <h1 className="font-bold text-white text-2xl">
-                            LG Soporte
+                            Soporte LG
                         </h1>
 
                         <p className="text-sm text-white/80">
