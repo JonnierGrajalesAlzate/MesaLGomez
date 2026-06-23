@@ -25,3 +25,13 @@ export const TodosTickets = async (usuarioId) => {
 
     return response.data;
 };
+
+
+export const InfoTicket = async (usuarioId) => {
+
+    const response = await axios.get(
+        `${API_URL}/info-ticket/${usuarioId}`
+    );
+
+    return response.data;
+};
