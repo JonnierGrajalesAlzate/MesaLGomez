@@ -65,6 +65,7 @@ function Topbar() {
                         <h1 className="font-bold text-white text-2xl">
                             Soporte LG
                         </h1>
+                        
 
                         <p className="text-sm text-white/80">
                             Londoño Gómez
