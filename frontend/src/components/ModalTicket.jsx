@@ -182,7 +182,7 @@ function ModalTicket({ ticket, onClose }) {
                                     </label>
 
                                     <p className="text-sm font-medium text-slate-800 break-words">
-                                        {detalle.tecnic || "Sin asignar"}
+                                        {detalle.tecnico}
                                     </p>
                                 </div>
 
