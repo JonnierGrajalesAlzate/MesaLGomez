@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { InfoTicket, TodosTickets } from "../services/dashboardService";
 import ModalTicket from "../components/ModalTicket";
+import Footer from "../components/Footer";
 
 function Tickets() {
     const usuario = JSON.parse(
@@ -155,12 +156,12 @@ const [ticketSeleccionado, setTicketSeleccionado] = useState(null);
                                 <tr
                                     key={ticket.id}
                                     className=" 
-                                        hover:bg-slate-50
+                                        hover:bg-slate-100
                                         transition
                                     "
                                 >
 
-                                    <td className="p-3 font-medium">
+                                    <td className="p-3 font-semibold">
                                         #{ticket.id}
                                     </td>
 
@@ -174,40 +175,52 @@ const [ticketSeleccionado, setTicketSeleccionado] = useState(null);
                                         </div>
                                     </td>
 
-                                    <td className="p-3 text-slate-500">
+                                    <td className="p-3 text-slate-800">
                                         {ticket.categoria}
                                     </td>
-
                                     <td className="p-3">
-
                                         <span
-                                            className="
+                                            className={`
                                                 px-2
                                                 py-1
                                                 text-xs
-                                                rounded-full 
-                                                text-slate-500
-                                            "
+                                                rounded-full
+                                                font-semibold
+                                                ${
+                                                    ticket.estado === "ABIERTO"
+                                                        ? "text-green-500"
+                                                        : ticket.estado === "CERRADO"
+                                                        ? "text-blue-500"
+                                                        : "text-slate-500"
+                                                }
+                                            `}
                                         >
                                             {ticket.estado}
                                         </span>
-
                                     </td>
-
                                     <td className="p-3">
-
                                         <span
-                                            className="
+                                            className={`
                                                 px-2
                                                 py-1
                                                 text-xs
-                                                rounded-full 
-                                                text-slate-500
-                                            "
+                                                rounded-full
+                                                font-semibold
+                                                ${
+                                                    ticket.prioridad === "BAJA"
+                                                        ? "text-blue-500"
+                                                        : ticket.prioridad === "MEDIA"
+                                                        ? "text-orange-500"
+                                                        : ticket.prioridad === "ALTA"
+                                                        ? "text-red-500"
+                                                        : ticket.prioridad === "CRITICA"
+                                                        ? "text-red-900"
+                                                        : "text-slate-500"
+                                                }
+                                            `}
                                         >
                                             {ticket.prioridad}
                                         </span>
-
                                     </td>
 
                                     <td className=" text-slate-500">
@@ -288,6 +301,7 @@ const [ticketSeleccionado, setTicketSeleccionado] = useState(null);
 
             )}
 
+        <Footer />
         </DashboardLayout>
     );
 }
