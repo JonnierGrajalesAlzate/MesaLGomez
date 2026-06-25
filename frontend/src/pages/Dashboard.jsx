@@ -3,12 +3,10 @@ import { useNavigate } from "react-router-dom";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { getDashboard, getUltimosTickets } from "../services/dashboardService";
 import { getNoticias } from "../services/noticiasService";
-import Footer from "../components/Footer"
-import inicio from "../assets/inicio.png";
+import Footer from "../components/Footer" 
 import crear from "../assets/crearTickets.png";
 import tickets from "../assets/tickets.png";
-import Base from "../assets/baseConocimiento.png";
-import logo from "../assets/favicon.png"
+import Base from "../assets/baseConocimiento.png"; 
 
 
 function Dashboard() {

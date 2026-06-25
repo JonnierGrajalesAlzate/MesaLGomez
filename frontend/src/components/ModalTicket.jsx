@@ -46,7 +46,7 @@ function ModalTicket({ ticket, onClose }) {
                 flex
                 items-center
                 justify-center
-                z-[9999]
+                z-9999
                 p-2
             "
         >
