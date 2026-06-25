@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
-
+import Footer from "../components/Footer";
 import { crearTicket } from "../services/ticketService";
+import ModalTicket from "../components/ModalTicket";
 
 import {
     getCategorias,
@@ -25,6 +26,8 @@ function CrearTickets() {
         categoria_id: "",
         prioridad_id: ""
     });
+    const [mostrarModal, setMostrarModal] = useState(false);
+    const [ticketSeleccionado, setTicketSeleccionado] = useState(null);
 
     useEffect(() => {
     cargarCatalogos()
@@ -161,12 +164,15 @@ function CrearTickets() {
 
             }
 
-            const response =
-                await crearTicket(data);
+            const response = await crearTicket(data);
 
-            setMensaje(
-                response.message
-            );
+setMensaje(response.message);
+
+setTicketSeleccionado({
+    id: response.ticket.id
+});
+
+setMostrarModal(true);
 
             setFormData({
                 titulo: "",
@@ -489,7 +495,7 @@ function CrearTickets() {
                 Archivo seleccionado
             </p>
 
-            <div
+            <div 
                 className="
                     bg-slate-100
                     border
@@ -500,7 +506,7 @@ function CrearTickets() {
                     text-slate-700
                 "
             >
-                📎 {archivo.name}
+            {archivo.name}
             </div>
 
             {
@@ -572,6 +578,16 @@ function CrearTickets() {
                 )}
 
             </form>
+            {mostrarModal && (
+    <ModalTicket
+        ticket={ticketSeleccionado}
+        onClose={() => {
+            setMostrarModal(false);
+            setTicketSeleccionado(null);
+        }}
+    />
+)}
+            <Footer />
 
         </DashboardLayout>
 

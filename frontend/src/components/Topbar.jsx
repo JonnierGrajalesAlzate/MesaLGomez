@@ -1,11 +1,25 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import {
+    useState,
+    useEffect,
+    useRef
+} from "react";
+import {
+    Link,
+    useLocation,
+    useNavigate,
+} from "react-router-dom";
 
 import logo2 from "../assets/logo2.png";
 
 function Topbar() {
+
     const [menuOpen, setMenuOpen] = useState(false);
+    const [userMenuOpen, setUserMenuOpen] =
+        useState(false);
+    const userMenuRef = useRef(null);
+
     const location = useLocation();
+    const navigate = useNavigate();
 
     const usuario =
         JSON.parse(localStorage.getItem("usuario")) || {};
@@ -27,11 +41,40 @@ function Topbar() {
             path: "/ayuda",
             label: "Ayuda",
         },
-        {
-            path: "/configuracion",
-            label: "Configuración",
-        },
     ];
+
+    const cerrarSesion = () => {
+        localStorage.removeItem("usuario");
+        navigate("/");
+    };
+    useEffect(() => {
+
+    function handleClickOutside(event) {
+
+        if (
+            userMenuRef.current &&
+            !userMenuRef.current.contains(event.target)
+        ) {
+            setUserMenuOpen(false);
+        }
+
+    }
+
+    document.addEventListener(
+        "mousedown",
+        handleClickOutside
+    );
+
+    return () => {
+
+        document.removeEventListener(
+            "mousedown",
+            handleClickOutside
+        );
+
+    };
+
+}, []);
 
     return (
         <>
@@ -39,7 +82,7 @@ function Topbar() {
                 className="
                     sticky
                     top-0
-                    z-[999]
+                    z-50
                     h-28
                     bg-[#0076e3]
                     border-b
@@ -55,6 +98,7 @@ function Topbar() {
                 {/* LOGO */}
 
                 <div className="flex items-center gap-4">
+
                     <img
                         src={logo2}
                         alt="Logo"
@@ -62,21 +106,25 @@ function Topbar() {
                     />
 
                     <div>
+
                         <h1 className="font-bold text-white text-2xl">
                             Soporte LG
                         </h1>
-                        
 
                         <p className="text-sm text-white/80">
                             Londoño Gómez
                         </p>
+
                     </div>
+
                 </div>
 
-                {/* MENU DESKTOP */}
+                {/* MENÚ DESKTOP */}
 
                 <nav className="hidden lg:flex items-center gap-10">
+
                     {menuItems.map((item) => {
+
                         const active =
                             location.pathname === item.path;
 
@@ -97,7 +145,6 @@ function Topbar() {
                             >
                                 {item.label}
 
-                                {/* Línea inferior animada */}
                                 <span
                                     className={`
                                         absolute
@@ -115,15 +162,22 @@ function Topbar() {
                                         }
                                     `}
                                 />
+
                             </Link>
                         );
                     })}
+
                 </nav>
 
-                {/* USUARIO + HAMBURGUESA */}
+                {/* USUARIO */}
 
-                <div className="flex items-center gap-5">
+                <div
+                    ref={userMenuRef}
+                    className="flex items-center gap-5 relative"
+>
+
                     <div className="hidden md:block text-right">
+
                         <p className="font-semibold text-white text-base">
                             {usuario.nombre || "Usuario"}
                         </p>
@@ -131,14 +185,24 @@ function Topbar() {
                         <p className="text-sm text-white/80">
                             {usuario.rol || "Sin rol"}
                         </p>
+
                     </div>
 
-                    <div
+                    <button
+                        onClick={() => {
+
+                            setUserMenuOpen(
+                                !userMenuOpen
+                            );
+
+                            setMenuOpen(false);
+
+                        }}
                         className="
                             w-12
                             h-12
                             rounded-full
-                            bg-[#005fc0]
+                            bg-[#00d4a1]
                             flex
                             items-center
                             justify-center
@@ -146,6 +210,9 @@ function Topbar() {
                             text-lg
                             text-white
                             shadow-md
+                            hover:bg-[#00c9ff]
+                            transition
+                            cursor-pointer
                         "
                     >
                         {usuario.nombre
@@ -153,14 +220,109 @@ function Topbar() {
                                   .charAt(0)
                                   .toUpperCase()
                             : "U"}
-                    </div>
+                    </button>
 
-                    {/* BOTÓN HAMBURGUESA */}
+                    {/* DROPDOWN USUARIO */}
+
+                    {userMenuOpen && (
+
+                        <div
+                            className="
+                                absolute
+                                top-16
+                                right-0
+                                w-80
+                                bg-white
+                                rounded-3xl
+                                shadow-2xl
+                                overflow-hidden
+                                z-[99999]
+                            "
+                        >
+
+                            <div className="p-6">
+
+                                <div className="flex items-center gap-4">
+
+                                    <div
+                                        className="
+                                            w-16
+                                            h-16
+                                            rounded-2xl
+                                            bg-[#00d4a1]
+                                            flex
+                                            items-center
+                                            justify-center
+                                            text-white
+                                            font-bold
+                                            text-2xl
+                                        "
+                                    >
+                                        {usuario.nombre
+                                            ? usuario.nombre
+                                                  .charAt(
+                                                      0
+                                                  )
+                                                  .toUpperCase()
+                                            : "U"}
+                                    </div>
+
+                                    <div>
+
+                                        <h3 className="font-bold text-slate-800">
+                                            {usuario.nombre}{" "}
+                                            {
+                                                usuario.apellido
+                                            }
+                                        </h3> 
+                                        <p className="text-slate-500 text-sm">
+                                            {usuario.cargo}
+                                        </p>
+                                        
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div className=" p-5">
+
+                                <button
+                                    onClick={
+                                        cerrarSesion
+                                    }
+                                    className="
+                                        w-full
+                                        py-3
+                                        rounded-2xl
+                                        bg-[#0076e3]
+                                        hover:bg-[#00c9ff]
+                                        text-white
+                                        font-semibold
+                                        transition
+                                        cursor-pointer
+                                    "
+                                >
+                                    Cerrar Sesión
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    )}
+
+                    {/* HAMBURGUESA */}
 
                     <button
-                        onClick={() =>
-                            setMenuOpen(!menuOpen)
-                        }
+                        onClick={() => {
+
+                            setMenuOpen(!menuOpen);
+
+                            setUserMenuOpen(false);
+
+                        }}
                         className="
                             lg:hidden
                             flex
@@ -178,15 +340,25 @@ function Topbar() {
                     >
                         {menuOpen ? "✕" : "☰"}
                     </button>
+
                 </div>
+
             </header>
 
             {/* OVERLAY */}
 
-            {menuOpen && (
+            {menuOpen && !userMenuOpen && (
                 <div
-                    className="fixed inset-0 bg-black/30 z-[998] lg:hidden"
-                    onClick={() => setMenuOpen(false)}
+                    className="
+                        fixed
+                        inset-0
+                        bg-black/30
+                        z-[998]
+                        lg:hidden
+                    "
+                    onClick={() =>
+                        setMenuOpen(false)
+                    }
                 />
             )}
 
@@ -215,7 +387,9 @@ function Topbar() {
                     }
                 `}
             >
+
                 {menuItems.map((item) => {
+
                     const active =
                         location.pathname === item.path;
 
@@ -223,9 +397,12 @@ function Topbar() {
                         <Link
                             key={item.path}
                             to={item.path}
-                            onClick={() =>
-                                setMenuOpen(false)
-                            }
+                            onClick={() => {
+
+                                setMenuOpen(false);
+                                setUserMenuOpen(false);
+
+                            }}
                             className={`
                                 flex
                                 items-center
@@ -239,7 +416,7 @@ function Topbar() {
 
                                 ${
                                     active
-                                        ? "bg-[#0064c2] text-white border-[#00d4a1]"
+                                        ? "bg-[#0c3c69] text-white border-[#00d4a1]"
                                         : "text-white/90 border-transparent hover:bg-[#0064c2] hover:border-[#00d4a1]"
                                 }
                             `}
@@ -249,41 +426,6 @@ function Topbar() {
                     );
                 })}
 
-                <div className="border-t border-white/10 p-5">
-                    <div className="flex items-center gap-4">
-                        <div
-                            className="
-                                w-12
-                                h-12
-                                rounded-full
-                                bg-[#005fc0]
-                                flex
-                                items-center
-                                justify-center
-                                font-bold
-                                text-white
-                            "
-                        >
-                            {usuario.nombre
-                                ? usuario.nombre
-                                      .charAt(0)
-                                      .toUpperCase()
-                                : "U"}
-                        </div>
-
-                        <div>
-                            <p className="text-white font-semibold">
-                                {usuario.nombre ||
-                                    "Usuario"}
-                            </p>
-
-                            <p className="text-sm text-white/70">
-                                {usuario.rol ||
-                                    "Sin rol"}
-                            </p>
-                        </div>
-                    </div>
-                </div>
             </div>
         </>
     );
