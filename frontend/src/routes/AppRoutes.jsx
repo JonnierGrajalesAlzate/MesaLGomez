@@ -5,6 +5,7 @@ import Dashboard from "../pages/Dashboard";
 import Tickets from "../pages/Tickets";
 import CrearTickets from "../pages/CrearTickets";
 import Ayuda from "../pages/Ayuda"; 
+import Tecnico from "../pages/Tecnico";
 
 function AppRoutes() {
 return ( <BrowserRouter> <Routes>
@@ -28,6 +29,10 @@ return ( <BrowserRouter> <Routes>
             <Route
                   path="/ayuda"
                  element={<Ayuda />}
+            />
+            <Route
+                  path="/tecnico"
+                 element={<Tecnico />}
             />
             
         </Routes>
