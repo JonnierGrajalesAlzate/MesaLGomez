@@ -1,6 +1,6 @@
 import pool from "../config/database.js";
 
-export const obtenerNoticias = async (req, res) => {
+export const getNoticias = async (req, res) => {
     try {
 
         const result = await pool.query(`
@@ -8,7 +8,7 @@ export const obtenerNoticias = async (req, res) => {
                 n.id,
                 n.titulo,
                 n.descripcion,
-                n.etiqueta,
+                n.etiqueta_id,
                 n.fecha_creacion,
                 u.nombre,
                 u.apellido
