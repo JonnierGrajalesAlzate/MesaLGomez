@@ -46,4 +46,39 @@ export const getPrioridades = async (req, res) => {
         });
 
     }
+};export const obtenerEtiquetas = async (req, res) => {
+
+    try {
+
+        const result = await pool.query(`
+            SELECT
+                id,
+                nombre,
+                color
+            FROM etiquetas
+            ORDER BY nombre;
+        `);
+
+        return res.status(200).json({
+
+            success: true,
+
+            etiquetas: result.rows
+
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        return res.status(500).json({
+
+            success: false,
+
+            message: error.message
+
+        });
+
+    }
+
 };

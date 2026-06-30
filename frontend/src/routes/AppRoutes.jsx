@@ -5,7 +5,7 @@ import Dashboard from "../pages/Dashboard";
 import Tickets from "../pages/Tickets";
 import CrearTickets from "../pages/CrearTickets";
 import Ayuda from "../pages/Ayuda"; 
-import Tecnico from "../pages/Tecnico";
+import Tecnico from "../pages/Tecnico/Tecnico";
 
 function AppRoutes() {
 return ( <BrowserRouter> <Routes>
