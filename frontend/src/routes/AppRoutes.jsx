@@ -6,7 +6,7 @@ import Tickets from "../pages/Tickets";
 import CrearTickets from "../pages/CrearTickets";
 import Ayuda from "../pages/Ayuda"; 
 import Tecnico from "../pages/Tecnico/Tecnico";
-
+import Noticias from "../pages/Tecnico/Noticias";
 function AppRoutes() {
 return ( <BrowserRouter> <Routes>
 
@@ -33,6 +33,10 @@ return ( <BrowserRouter> <Routes>
             <Route
                   path="/tecnico"
                  element={<Tecnico />}
+            />
+            <Route
+                  path="/noticias"
+                 element={<Noticias />}
             />
             
         </Routes>

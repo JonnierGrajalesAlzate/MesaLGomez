@@ -4,10 +4,13 @@ import fs from "fs";
 import path from "path";
 
 import {
-    crearTicket
+    crearTicket, obtenerDashboardTecnico, obtenerDetalleTicket
 } from "../controllers/ticketController.js";
 
+import { actualizarEstadoTicket } from "../controllers/actualizarEstado.js";
+
 const router = Router();
+console.log("CARGANDO ticketRoutes");
 
 // Crear carpeta uploads si no existe
 
@@ -87,6 +90,15 @@ router.post(
     "/",
     upload.single("adjunto"),
     crearTicket
+);
+router.put("/:id/estado", actualizarEstadoTicket);
+router.get(
+    "/dashboard/:tecnico_id",
+    obtenerDashboardTecnico
+);
+router.get(
+    "/:id",
+    obtenerDetalleTicket
 );
 
 export default router;

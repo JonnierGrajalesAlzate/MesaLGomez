@@ -198,7 +198,7 @@ function Tecnico() {
 
     }, []);
 
-    return (
+     return (
 
         <DashboardLayoutTecnico>
 
