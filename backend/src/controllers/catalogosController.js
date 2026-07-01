@@ -46,7 +46,7 @@ export const getPrioridades = async (req, res) => {
         });
 
     }
-};export const obtenerEtiquetas = async (req, res) => {
+};export const getEtiquetas = async (req, res) => {
 
     try {
 

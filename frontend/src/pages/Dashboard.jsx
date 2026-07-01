@@ -86,7 +86,22 @@ function Dashboard() {
 
                 <div className="flex flex-col md:flex-row items-center justify-center gap-10 h-full">
 
-                    {/* Sección de las estadisticas del usuario */}
+                    {/* Sección de bienvenida*/}
+                    <div className="flex-1 text-center">
+
+                        <h2 className="text-3xl font-bold text-[#0B2347] mb-3">
+                            Hola {usuario.nombre},
+                        </h2>
+
+                        <h2 className="text-3xl font-bold text-[#0B2347] mb-4">
+                            Te damos la bienvenida a Soporte LG
+                        </h2>
+
+                        <p className="text-slate-500">
+                            Aquí tienes un resumen de tu actividad de tickets.
+                        </p>
+
+                    </div>
                     <div className="rounded-2xl p-6 min-w-[180px]">
 
                         <div className="flex flex-col gap-6">
@@ -123,22 +138,6 @@ function Dashboard() {
 
                         </div>
                     </div> 
-                    {/* Sección de bienvenida*/}
-                    <div className="flex-1 text-center">
-
-                        <h2 className="text-3xl font-bold text-[#0B2347] mb-3">
-                            Hola {usuario.nombre},
-                        </h2>
-
-                        <h2 className="text-3xl font-bold text-[#0B2347] mb-4">
-                            Te damos la bienvenida a Soporte LG
-                        </h2>
-
-                        <p className="text-slate-500">
-                            Aquí tienes un resumen de tu actividad de tickets.
-                        </p>
-
-                    </div>
 
                 </div>
 

@@ -1,9 +1,44 @@
 import { Router } from "express";
-import { getNoticias } from "../controllers/noticiasController.js";
+
+import {
+
+    obtenerNoticias,
+
+    obtenerNoticiaPorId,
+
+    crearNoticia,
+
+    actualizarNoticia,
+
+    eliminarNoticia
+
+} from "../controllers/noticiasController.js";
 
 const router = Router();
+console.log("CARGANDO noticiasRoutes");
+router.get(
+    "/",
+    obtenerNoticias
+);
 
-router.get("/", getNoticias);
+router.get(
+    "/:id",
+    obtenerNoticiaPorId
+);
+
+router.post(
+    "/",
+    crearNoticia
+);
+
+router.put(
+    "/:id",
+    actualizarNoticia
+);
+
+router.delete(
+    "/:id",
+    eliminarNoticia
+);
 
 export default router;
-
