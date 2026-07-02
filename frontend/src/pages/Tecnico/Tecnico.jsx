@@ -5,11 +5,8 @@ import ModalDetalleTicket from "../../components/tecnico/ModalDetalleTicket";
 import Swal from "sweetalert2";
 import DashboardLayoutTecnico from "../../layouts/tecnico/DashboardLayoutTecnico.jsx"
 
-import {
-    obtenerDashboardTecnico,
-    obtenerDetalleTicket,
-    actualizarEstadoTicket
-} from "../../services/Tecnico/tecnicoService.js";
+import { obtenerDashboardTecnico } from "../../services/Dashboards/dashboardTecnicoService.js";
+import { obtenerDetalleTicket, actualizarEstadoTicket } from "../../services/Tickets/ticketService.js";
 
 function Tecnico() {
 

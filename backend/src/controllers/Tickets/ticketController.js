@@ -1,4 +1,4 @@
-import pool from "../config/database.js";
+import pool from "../../config/database.js";
 
 export const crearTicket = async (req, res) => {
 console.log("CARGANDO ticketController");
@@ -159,7 +159,7 @@ console.log("CARGANDO ticketController");
             message:
                 estado_id === 1
                     ? "Su Ticket fue creado correctamente."
-                    : "Todos los técnicos de esta categoría están ocupados. Su ticket quedó EN ESPERA.",
+                    : "Su ticket quedó EN ESPERA.",
             ticket
         });
 
@@ -197,68 +197,113 @@ console.log("CARGANDO ticketController");
     }
 
 };
-export const obtenerDashboardTecnico = async (req, res) => {
+
+export const obtenerUltimosTickets = async (req, res) => {
+    try {
+
+        const { usuarioId } = req.params;
+
+        const result = await pool.query(
+            `
+            SELECT
+                t.id,
+                t.titulo,
+                c.nombre AS categoria,
+                e.nombre AS estado,
+                p.nombre AS prioridad,
+                t.fecha_creacion
+            FROM tickets t
+            INNER JOIN categorias c
+                ON c.id = t.categoria_id
+            INNER JOIN estados e
+                ON e.id = t.estado_id
+            INNER JOIN prioridades p
+                ON p.id = t.prioridad_id
+            WHERE t.usuario_id = $1
+            ORDER BY t.fecha_creacion DESC
+            LIMIT 3
+            `,
+            [usuarioId]
+        );
+
+        res.json(result.rows);
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            message: "Error obteniendo tickets"
+        });
+
+    }
+};
+
+export const TodosTickets = async (req, res) => {
+    try {
+
+        const { usuarioId } = req.params;
+
+        const result = await pool.query(
+            `
+            SELECT
+                t.id,
+                t.titulo,
+                c.nombre AS categoria,
+                e.nombre AS estado,
+                p.nombre AS prioridad,
+                t.fecha_creacion
+            FROM tickets t
+            INNER JOIN categorias c
+                ON c.id = t.categoria_id
+            INNER JOIN estados e
+                ON e.id = t.estado_id
+            INNER JOIN prioridades p
+                ON p.id = t.prioridad_id
+            WHERE t.usuario_id = $1
+            ORDER BY t.fecha_creacion DESC
+            `,
+            [usuarioId]
+        );
+
+        res.json(result.rows);
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            message: "Error obteniendo tickets"
+        });
+
+    }
+};
+
+export const InfoTicket = async (req, res) => {
 
     try {
 
-        const { tecnico_id } = req.params;
+        const { ticketId } = req.params;
 
-        // ==========================
-        // Estadísticas
-        // ==========================
-
-        const estadisticasResult = await pool.query(
+        const result = await pool.query(
             `
             SELECT
-
-                COUNT(*) FILTER (
-                    WHERE estado_id = 1
-                ) AS abiertos,
-
-                COUNT(*) FILTER (
-                    WHERE estado_id = 3
-                ) AS proceso,
-
-                COUNT(*) FILTER (
-                    WHERE estado_id = 4
-                ) AS espera,
-
-                COUNT(*) FILTER (
-                    WHERE estado_id = 2
-                ) AS cerrados
-
-            FROM tickets
-
-            WHERE tecnico_id = $1
-            `,
-            [tecnico_id]
-        );
-
-        // ==========================
-        // Tickets del técnico
-        // ==========================
-
-        const ticketsResult = await pool.query(
-            `
-            SELECT
-
                 t.id,
                 t.titulo,
                 t.descripcion,
+                t.fecha_creacion,
+                t.fecha_cierre,
 
                 c.nombre AS categoria,
-
                 p.nombre AS prioridad,
-
                 e.nombre AS estado,
 
-                CONCAT(
-                    u.nombre,
-                    ' ',
-                    u.apellido
-                ) AS usuario,
+                u.nombre || ' ' || u.apellido AS usuario,
 
-                t.fecha_creacion
+                COALESCE(
+                    tec.nombre || ' ' || tec.apellido,
+                    'Sin asignar'
+                ) AS tecnico
 
             FROM tickets t
 
@@ -274,41 +319,31 @@ export const obtenerDashboardTecnico = async (req, res) => {
             INNER JOIN usuarios u
                 ON u.id = t.usuario_id
 
-            WHERE
-                t.tecnico_id = $1
+            LEFT JOIN usuarios tec
+                ON tec.id = t.tecnico_id
 
-            ORDER BY
-                t.fecha_creacion ASC
+            WHERE t.id = $1
             `,
-            [tecnico_id]
+            [ticketId]
         );
 
-        return res.status(200).json({
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                mensaje: "Ticket no encontrado"
+            });
+        }
 
-            success: true,
-
-            estadisticas:
-                estadisticasResult.rows[0],
-
-            tickets:
-                ticketsResult.rows
-
-        });
+        res.json(result.rows[0]);
 
     } catch (error) {
 
         console.error(error);
 
-        return res.status(500).json({
-
-            success: false,
-
-            message: error.message
-
+        res.status(500).json({
+            mensaje: "Error al obtener ticket"
         });
 
     }
-
 };
 
 export const obtenerDetalleTicket = async (req, res) => {
@@ -322,17 +357,13 @@ export const obtenerDetalleTicket = async (req, res) => {
             SELECT
 
                 t.id,
-
                 t.titulo,
-
                 t.descripcion,
 
                 t.estado_id,
-
                 e.nombre AS estado,
 
                 t.prioridad_id,
-
                 p.nombre AS prioridad,
 
                 c.nombre AS categoria,
@@ -343,18 +374,25 @@ export const obtenerDetalleTicket = async (req, res) => {
                     u.apellido
                 ) AS usuario,
 
-                t.fecha_creacion,
+                CONCAT(
+                    tec.nombre,
+                    ' ',
+                    tec.apellido
+                ) AS tecnico,
 
+                t.fecha_creacion,
                 t.fecha_cierre,
 
                 a.nombre_archivo,
-
                 a.ruta_archivo
 
             FROM tickets t
 
             INNER JOIN usuarios u
                 ON u.id = t.usuario_id
+
+            LEFT JOIN usuarios tec
+                ON tec.id = t.tecnico_id
 
             INNER JOIN categorias c
                 ON c.id = t.categoria_id

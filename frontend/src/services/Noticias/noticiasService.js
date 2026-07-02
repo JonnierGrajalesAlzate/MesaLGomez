@@ -2,11 +2,7 @@ import axios from "axios";
 
 const API_URL = "http://localhost:3000/api/noticias";
 
-// ==========================
-// Obtener todas las noticias
-// ==========================
-
-export const getNoticias = async () => {
+export const obtenerNoticias = async () => {
 
     const response = await axios.get(API_URL);
 
@@ -14,11 +10,7 @@ export const getNoticias = async () => {
 
 };
 
-// ==========================
-// Obtener una noticia por ID
-// ==========================
-
-export const getNoticiaPorId = async (id) => {
+export const obtenerNoticiaPorId = async (id) => {
 
     const response = await axios.get(
         `${API_URL}/${id}`
@@ -26,11 +18,7 @@ export const getNoticiaPorId = async (id) => {
 
     return response.data;
 
-};
-
-// ==========================
-// Crear noticia
-// ==========================
+}; 
 
 export const crearNoticia = async (noticia) => {
 
@@ -41,11 +29,7 @@ export const crearNoticia = async (noticia) => {
 
     return response.data;
 
-};
-
-// ==========================
-// Actualizar noticia
-// ==========================
+}; 
 
 export const actualizarNoticia = async (
     id,
@@ -59,11 +43,7 @@ export const actualizarNoticia = async (
 
     return response.data;
 
-};
-
-// ==========================
-// Eliminar noticia
-// ==========================
+}; 
 
 export const eliminarNoticia = async (id) => {
 
@@ -74,10 +54,10 @@ export const eliminarNoticia = async (id) => {
     return response.data;
 
 };
-export const getEtiquetas = async () => {
+export const obtenerEtiquetas = async () => {
 
     const response = await axios.get(
-        "http://localhost:3000/api/catalogos/etiquetas"
+        "http://localhost:3000/api/noticias/etiquetas"
     );
 
     return response.data.etiquetas;

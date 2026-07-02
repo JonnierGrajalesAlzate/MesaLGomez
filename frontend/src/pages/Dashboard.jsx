@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DashboardLayout from "../layouts/DashboardLayout";
-import { getDashboard, getUltimosTickets } from "../services/dashboardService";
-import { getNoticias } from "../services/noticiasService";
-import Footer from "../components/Footer" 
+import { obtenerDashboardUsuario } from "../services/Dashboards/dashboardUsuarioService";
+import { obtenerNoticias } from "../services/Noticias/noticiasService";
+import {obtenerUltimosTickets} from "../services/Tickets/ticketService";
+import Footer from "../components/Footer" ;
 import crear from "../assets/crearTickets.png";
 import tickets from "../assets/tickets.png";
 import Base from "../assets/baseConocimiento.png"; 
@@ -28,7 +29,7 @@ function Dashboard() {
 
     const cargarDashboard = async () => {
         try {
-            const data = await getDashboard(usuario.id);
+            const data = await obtenerDashboardUsuario(usuario.id);
 
             setEstadisticas({
                 pendientes: data.pendientes,
@@ -36,10 +37,10 @@ function Dashboard() {
                 total: data.total,
             });
 
-            const ticketsData = await getUltimosTickets(usuario.id);
-            setUltimosTickets(ticketsData);
+            const ticketsData = await obtenerUltimosTickets(usuario.id);
+setUltimosTickets(ticketsData);
 
-            const noticiasData = await getNoticias();
+            const noticiasData = await obtenerNoticias();
 
             console.log("Noticias:", noticiasData);
 
@@ -171,11 +172,10 @@ function Dashboard() {
                                     </h4>
 
                                     <span
-                                        className={
-                                            noticia.etiqueta === "Importante"
-                                                ? "bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full"
-                                                : "bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full"
-                                        }
+                                        className="px-3 py-1 rounded-full text-xs font-semibold text-white"
+                                        style={{
+                                            backgroundColor: noticia.color
+                                        }}
                                     >
                                         {noticia.etiqueta}
                                     </span>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
-import { getEtiquetas } from "../../../services/noticiasService";
+import { obtenerEtiquetas } from "../../../services/Noticias/noticiasService";
 
 function ModalNoticia({
 
@@ -18,6 +18,7 @@ function ModalNoticia({
     const [formulario, setFormulario] = useState({
 
         titulo: "",
+        
 
         descripcion: "",
 
@@ -40,7 +41,7 @@ function ModalNoticia({
 
             try {
 
-                const data = await getEtiquetas();
+                const data = await obtenerEtiquetas();
 
                 setEtiquetas(data);
 
@@ -165,7 +166,7 @@ function ModalNoticia({
         onGuardar(formulario);
 
     };
-
+    
     return (
 
         <div
@@ -383,7 +384,7 @@ function ModalNoticia({
                                 rounded-xl
                                 p-3
                                 outline-none
-                                resize-none
+                              F  resize-none
                                 focus:ring-2
                                 focus:ring-[#0076E3]
                             "

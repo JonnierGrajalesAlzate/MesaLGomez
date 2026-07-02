@@ -150,33 +150,12 @@ function TablaNoticias({
                                             >
 
                                                 <span
-                                                    className={`
-
-                                                        px-3
-
-                                                        py-1
-
-                                                        rounded-full
-
-                                                        text-xs
-
-                                                        font-semibold
-
-                                                        ${noticia.etiqueta === "Importante"
-
-                                                            ? "bg-red-100 text-red-700"
-
-                                                            : "bg-blue-100 text-blue-700"}
-
-                                                    `}
+                                                    className="px-3 py-1 rounded-full text-xs font-semibold text-white"
+                                                    style={{
+                                                        backgroundColor: noticia.color
+                                                    }}
                                                 >
-
-                                                    {
-
-                                                        noticia.etiqueta
-
-                                                    }
-
+                                                    {noticia.etiqueta}
                                                 </span>
 
                                                 {
