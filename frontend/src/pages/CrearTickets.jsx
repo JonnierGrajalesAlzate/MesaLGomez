@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
 import Footer from "../components/Footer";
-import { crearTicket } from "../services/ticketService";
+import { crearTicket } from "../services/Tickets/ticketService";
 import ModalTicket from "../components/ModalTicket";
 
 import {
-    getCategorias,
-    getPrioridades
-} from "../services/catalogosService";
+    obtenerCategorias,
+    obtenerPrioridades
+} from "../services/Tickets/catalogosService";
 
 function CrearTickets() {
 
@@ -86,10 +86,10 @@ function CrearTickets() {
         try {
 
             const categoriasData =
-                await getCategorias();
+                await obtenerCategorias();
 
             const prioridadesData =
-                await getPrioridades();
+                await obtenerPrioridades();
 
             setCategorias(categoriasData);
             setPrioridades(prioridadesData);
@@ -338,53 +338,66 @@ setMostrarModal(true);
 
                     </div>
 
-                    <div>
+                    <div> 
 
-                        <label
-                            className="
-                                block
-                                mb-2
-                                font-medium
-                                text-slate-900
-                            "
-                        >
-                            Prioridad
-                        </label>
+                        <div>
 
-                        <select
-                            name="prioridad_id"
-                            value={formData.prioridad_id}
-                            onChange={handleChange}
-                            className="
-                                w-full
-                                border
-                                border-slate-300
-                                text-slate-500
-                                rounded-lg
-                                px-4
-                                py-3
-                            "
-                            required
-                        >
+                            <label
+                                className="
+                                    block
+                                    mb-2
+                                    font-medium
+                                    text-slate-900
+                                "
+                            >
+                                Prioridad
+                            </label> 
+                            <div className="grid grid-cols-3 gap-3">
 
-                            <option value="">
-                                Seleccione una prioridad
-                            </option>
+    {prioridades.map((prioridad) => {
 
-                            {prioridades.map((prioridad) => (
+        const seleccionada =
+            Number(formData.prioridad_id) === prioridad.id;
 
-                                <option
-                                    key={prioridad.id}
-                                    value={prioridad.id}
-                                >
-                                    {prioridad.nombre}
-                                </option>
+        return (
 
-                            ))}
+            <button
+                key={prioridad.id}
+                type="button"
+                onClick={() =>
+                    setFormData({
+                        ...formData,
+                        prioridad_id: prioridad.id
+                    })
+                }
+                style={{
+                    backgroundColor: seleccionada
+                        ? prioridad.color
+                        : `${prioridad.color}20`, // Color con transparencia
+                    borderColor: prioridad.color,
+                    color: seleccionada
+                        ? "#FFFFFF"
+                        : prioridad.color
+                }}
+                className="
+                    border-2
+                    rounded-xl
+                    py-4
+                    px-4
+                    font-semibold
+                    transition-all
+                    cursor-pointer
+                    hover:scale-105
+                "
+            >
+                {prioridad.nombre}
+            </button>
 
-                        </select>
+        );
 
-                    </div>
+    })}
+
+</div></div></div>
 
                 </div>
 
@@ -564,10 +577,10 @@ setMostrarModal(true);
                 {mensaje && (
                     <div
                         className="
-                            bg-green-100
+                            bg-sky-700
                             border
                             border-green-300
-                            text-green-700
+                            text-white
                             p-3
                             rounded-lg
                         "

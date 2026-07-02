@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_URL = "http://localhost:3000/api/catalogos";
 
-export const getCategorias = async () => {
+export const obtenerCategorias = async () => {
 
     const response = await axios.get(
         `${API_URL}/categorias`
@@ -11,7 +11,7 @@ export const getCategorias = async () => {
     return response.data;
 };
 
-export const getPrioridades = async () => {
+export const obtenerPrioridades = async () => {
 
     const response = await axios.get(
         `${API_URL}/prioridades`

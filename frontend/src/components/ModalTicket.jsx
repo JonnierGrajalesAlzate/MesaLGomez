@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { InfoTicket } from "../services/dashboardService";
+import { InfoTicket } from "../services/Tickets/ticketService";
 
 function ModalTicket({ ticket, onClose }) {
 

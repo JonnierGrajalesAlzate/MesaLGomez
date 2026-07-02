@@ -4,15 +4,16 @@ import fs from "fs";
 import path from "path";
 
 import {
-    crearTicket, obtenerDashboardTecnico, obtenerDetalleTicket
-} from "../controllers/ticketController.js";
+    crearTicket, 
+    obtenerUltimosTickets, 
+    TodosTickets, 
+    InfoTicket,  
+    obtenerDetalleTicket
+} from "../../controllers/Tickets/ticketController.js";
 
-import { actualizarEstadoTicket } from "../controllers/actualizarEstado.js";
+import { actualizarEstadoTicket } from "../../controllers/Tickets/actualizarEstado.js";
 
-const router = Router();
-console.log("CARGANDO ticketRoutes");
-
-// Crear carpeta uploads si no existe
+const router = Router(); 
 
 const uploadsPath = path.resolve("uploads");
 
@@ -91,11 +92,24 @@ router.post(
     upload.single("adjunto"),
     crearTicket
 );
-router.put("/:id/estado", actualizarEstadoTicket);
+
 router.get(
-    "/dashboard/:tecnico_id",
-    obtenerDashboardTecnico
+    "/ultimos-tickets/:usuarioId",
+    obtenerUltimosTickets
 );
+
+router.get(
+    "/todos-tickets/:usuarioId",
+    TodosTickets
+);
+
+router.get(
+    "/info-ticket/:ticketId",
+    InfoTicket
+);
+
+router.put("/:id/estado", actualizarEstadoTicket);
+
 router.get(
     "/:id",
     obtenerDetalleTicket

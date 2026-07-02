@@ -1,8 +1,6 @@
-import pool from "../config/database.js";
+import pool from "../../config/database.js";
 
-// ==========================================
-// Obtener todas las noticias
-// ==========================================
+ 
 console.log("CARGANDO noticiasController");
 export const obtenerNoticias = async (req, res) => {
 
@@ -54,10 +52,7 @@ ORDER BY n.fecha_creacion DESC;
 }
 
 };
-
-// ==========================================
-// Obtener una noticia por ID
-// ==========================================
+ 
 
 export const obtenerNoticiaPorId = async (req, res) => {
 
@@ -127,10 +122,7 @@ WHERE n.id = $1;
     }
 
 };
-
-// ==========================================
-// Crear noticia
-// ==========================================
+ 
 
 export const crearNoticia = async (req, res) => {
 
@@ -222,11 +214,7 @@ RETURNING *;
 
     }
 
-};
-
-// ==========================================
-// Actualizar noticia
-// ==========================================
+}; 
 
 export const actualizarNoticia = async (req, res) => {
 
@@ -302,9 +290,6 @@ RETURNING *;
 
 };
 
-// ==========================================
-// Eliminar noticia
-// ==========================================
 
 export const eliminarNoticia = async (req, res) => {
 
@@ -352,6 +337,43 @@ export const eliminarNoticia = async (req, res) => {
             success: false,
 
             message: "Error al eliminar la noticia."
+
+        });
+
+    }
+
+};
+
+export const obtenerEtiquetas = async (req, res) => {
+
+    try {
+
+        const result = await pool.query(`
+            SELECT
+                id,
+                nombre,
+                color
+            FROM etiquetas
+            ORDER BY nombre;
+        `);
+
+        return res.status(200).json({
+
+            success: true,
+
+            etiquetas: result.rows
+
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        return res.status(500).json({
+
+            success: false,
+
+            message: error.message
 
         });
 

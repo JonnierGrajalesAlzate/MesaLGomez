@@ -7,7 +7,7 @@ import ModalNoticia from "../../components/tecnico/Noticias/ModalNoticia.jsx";
 
 import {
 
-    getNoticias,
+    obtenerNoticias,
 
     crearNoticia,
 
@@ -15,7 +15,7 @@ import {
 
     eliminarNoticia
 
-} from "../../services/noticiasService.js";
+} from "../../services/Noticias/noticiasService.js";
 
 function Noticias() {
 
@@ -39,7 +39,7 @@ function Noticias() {
 
     try {
 
-        const noticias = await getNoticias();
+        const noticias = await obtenerNoticias();
 
         setNoticias(noticias);
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
-import { InfoTicket, TodosTickets } from "../services/dashboardService";
+import { InfoTicket, TodosTickets } from "../services/Tickets/ticketService.js";
 import ModalTicket from "../components/ModalTicket";
 import Footer from "../components/Footer";
 
