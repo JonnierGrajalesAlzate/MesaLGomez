@@ -26,7 +26,7 @@ export const login = async (req, res) => {
         if (result.rows.length === 0) {
             return res.status(401).json({
                 success: false,
-                message: "Correo incorrecto"
+                message: "Credenciales incorrectas"
             });
         }
 
@@ -35,7 +35,7 @@ export const login = async (req, res) => {
         if (usuario.password !== password) {
             return res.status(401).json({
                 success: false,
-                message: "Contraseña incorrecta"
+                message: "Credenciales incorrectas"
             });
         }
 
